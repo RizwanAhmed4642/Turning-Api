@@ -96,11 +96,11 @@ namespace Meeting_App.Controllers.Authentication
                 using (var db = new IDDbContext())
                 {
                     var authClaims = new List<Claim>();
-                    string Name = "";
+                     string Name = "";
 
                     Applicationuser user = await userManager.FindByNameAsync(model.UserName);
 
-                    if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+                     if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
                     {
                         var userRoles = await userManager.GetRolesAsync(user);
 
@@ -149,7 +149,7 @@ namespace Meeting_App.Controllers.Authentication
                 }
             }
             catch (Exception ex)
-            {
+               {
                 return BadRequest(UtilService.GetExResponse<Exception>(ex));
             }
 

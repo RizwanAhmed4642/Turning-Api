@@ -62,7 +62,7 @@ namespace Meeting_App.Data.Database.Tables
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Initial Catalog=MeetingApp;user id=muddasir;password=abc@123;Data Source=172.16.15.5");
+                optionsBuilder.UseSqlServer("Initial Catalog=TrainingAPPDB;user id=muddasir;password=abc@123;Data Source=172.16.15.5");
             }
         }
 
