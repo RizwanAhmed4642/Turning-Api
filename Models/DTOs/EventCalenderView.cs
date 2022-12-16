@@ -10,6 +10,9 @@ namespace Meeting_App.Models.DTOs
     {
         public int? Id { get; set; }
         public string Title { get; set; }
+        public string Cadre { get; set; }
+        public string TrainingType { get; set; }
+        public string TrainingCategory { get; set; }
         public string Description { get; set; }
         public string ExternalParticipant { get; set; }
         public string ExternalParticipantsMobileNo { get; set; }
@@ -21,7 +24,6 @@ namespace Meeting_App.Models.DTOs
         public DateTime? CreationDate { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdationDate { get; set; }
-        public IFormFile AttachmentFile { get; set; }
         public List<IFormFile> MeetingAttachments { get; set; }
         public string Organizer { get; set; }
         public string Venue { get; set; }
@@ -40,6 +42,7 @@ namespace Meeting_App.Models.DTOs
         //public List<TaskCcList> TaskCcs = new List<TaskCcList>();
 
         public List<EventParticipantView> EventParticipant = new List<EventParticipantView>();
+        public string Departments { get; set; }
     }
 
     public class EventParticipantView
@@ -68,6 +71,28 @@ namespace Meeting_App.Models.DTOs
     {
         public int Id { get; set; }
         public string Venue { get; set; }
+        public int? OderBy { get; set; }
+        public bool? RecordStatus { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime? UpdationDate { get; set; }
+    }
+    public class TrainingCategoryDTO
+    {
+        public int Id { get; set; }
+        public string TraingCategoryName { get; set; }
+        public int? OderBy { get; set; }
+        public bool? RecordStatus { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime? UpdationDate { get; set; }
+    } 
+    public class TrainingTypeDTO
+    {
+        public int Id { get; set; }
+        public string TrainingTypeName { get; set; }
         public int? OderBy { get; set; }
         public bool? RecordStatus { get; set; }
         public string CreatedBy { get; set; }

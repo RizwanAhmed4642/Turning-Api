@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using Meeting_App.Data.Database.Tables;
+using Meeting_App.Data.Database.Context;
 using Meeting_App.Models;
 using Meeting_App.Models.DTOs;
 using Meeting_App.Service.Common;
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Meeting_App.Data.Database.Tables;
 
 namespace Meeting_App.Service.Auth
 {

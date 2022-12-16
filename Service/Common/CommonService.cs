@@ -1,4 +1,5 @@
 ﻿
+using Meeting_App.Data.Database.Context;
 using Meeting_App.Data.Database.Tables;
 using Meeting_App.Models;
 using Meeting_App.Models.DTOs;
@@ -328,6 +329,23 @@ namespace Meeting_App.Service.Common
                 using (var db = new IDDbContext())
                 {
                     return db.tbl_ContactCompany.OrderBy(x => x.OderBy).Select(x => new CommonClass { Id = x.Id, Name = x.CompanyName ,NameDisplay=x.CompanyName}).ToList();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
+        #region GetDepartmentList
+        public List<DepartmentsDto> GetDepartmentList()
+        {
+            try
+            {
+                using (var db = new IDDbContext())
+                {
+                    return db.tbl_ContactCompany.OrderBy(x => x.OderBy).Select(x => new DepartmentsDto { Id = x.Id, Name = x.CompanyName ,NameDisplay=x.CompanyName}).ToList();
                 }
             }
             catch (Exception)
@@ -1110,6 +1128,14 @@ public class CommonClass
     public int? CompanyId { get; set; }
     public int? departmentId { get; set; }
     public bool RecordStatus { get; set; }
+
+}
+public class DepartmentsDto
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string NameDisplay { get; set; }
+
 
 }
 public class ContactsFilterDTO

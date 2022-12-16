@@ -30,6 +30,10 @@ namespace Meeting_App.Data.Database.Tables
         public int? MeetingOrganizerId { get; set; }
         public int? MeetingVenueId { get; set; }
         public string MeetingAttendVia { get; set; }
+        public string TrainingType { get; set; }
+        public string TraingCategore { get; set; }
+        public string Cadre { get; set; }
+        public string Departments { get; set; }
 
         public virtual tbl_MeetingOrganizer MeetingOrganizer { get; set; }
         public virtual tbl_MeetingStatus MeetingStatus { get; set; }

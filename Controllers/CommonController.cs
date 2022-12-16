@@ -1,4 +1,5 @@
-﻿using Meeting_App.Data.Database.Tables;
+﻿using Meeting_App.Data.Database.Context;
+using Meeting_App.Data.Database.Tables;
 using Meeting_App.Models;
 using Meeting_App.Models.DTOs;
 using Meeting_App.Service.Common;
@@ -41,6 +42,26 @@ namespace Meeting_App.Controllers
                 return Ok(UtilService.GetExResponse<Exception>(ex));
             }
         }
+        //Startup New Work
+        #region Departments
+        [HttpGet]
+        [Route("GetDepartments")]
+        public IActionResult GetDepartments()
+        {
+            try
+            {
+                return Ok(UtilService.GetResponse<List<DepartmentsDto>>(_commonServices.GetDepartmentList()));
+            }
+            catch (Exception ex)
+            {
+                return Ok(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+
+
+        #endregion
+
+
 
         #region AssignedList
         [HttpGet]

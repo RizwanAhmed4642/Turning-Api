@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+
 using Meeting_App.Data.Database.Tables;
 using Meeting_App.Models.DTOs;
 using System;
@@ -16,8 +17,7 @@ namespace Meeting_App
 
         public class UserProfile : Profile
         {
-            public UserProfile()
-            {
+            public UserProfile()           {
                 #region FormsIndicatorSettings
                 CreateMap<TaskDTO, tbl_Task>();
                 CreateMap<tbl_Task, TaskDTO>();
@@ -35,6 +35,8 @@ namespace Meeting_App
                 CreateMap<MeetingVenueDTO, tbl_MeetingVenue>();
                 CreateMap<tbl_Conference, ConferenceViewDTO>();
                 CreateMap<ConferenceViewDTO, tbl_Conference>();
+                CreateMap<TrainingCategoryDTO, tbl_TrainingCategory>();
+                CreateMap<TrainingTypeDTO, tbl_TraingType>();
                 #endregion
             }
         }

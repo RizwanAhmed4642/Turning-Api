@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Meeting_App.Data.Database.Tables;
 
-namespace Meeting_App.Data.Database.Tables
+namespace Meeting_App.Data.Database.Context
 {
     public partial class IDDbContext : DbContext
     {
@@ -28,14 +28,24 @@ namespace Meeting_App.Data.Database.Tables
         public virtual DbSet<Attachment> Attachment { get; set; }
         public virtual DbSet<ContactDepartment> ContactDepartment { get; set; }
         public virtual DbSet<ContactsDetailView> ContactsDetailView { get; set; }
+        public virtual DbSet<District> District { get; set; }
+        public virtual DbSet<Divisions> Divisions { get; set; }
         public virtual DbSet<EventCalender> EventCalender { get; set; }
         public virtual DbSet<EventParticipant> EventParticipant { get; set; }
         public virtual DbSet<Files> Files { get; set; }
         public virtual DbSet<Folders> Folders { get; set; }
+        public virtual DbSet<HflistWithMode> HflistWithMode { get; set; }
+        public virtual DbSet<Hfmode> Hfmode { get; set; }
+        public virtual DbSet<Hftype> Hftype { get; set; }
+        public virtual DbSet<HrDesignation> HrDesignation { get; set; }
         public virtual DbSet<MeetingAttachment> MeetingAttachment { get; set; }
         public virtual DbSet<Notification> Notification { get; set; }
+        public virtual DbSet<ProfileView> ProfileView { get; set; }
+        public virtual DbSet<ScheduleTraining> ScheduleTraining { get; set; }
+        public virtual DbSet<Tehsils> Tehsils { get; set; }
         public virtual DbSet<ViewFileFolderUnionDeleted> ViewFileFolderUnionDeleted { get; set; }
         public virtual DbSet<ViewFilesFolders> ViewFilesFolders { get; set; }
+        public virtual DbSet<abc> abc { get; set; }
         public virtual DbSet<tbl_Conference> tbl_Conference { get; set; }
         public virtual DbSet<tbl_ConferenceAttachment> tbl_ConferenceAttachment { get; set; }
         public virtual DbSet<tbl_ConferenceAttendance> tbl_ConferenceAttendance { get; set; }
@@ -55,6 +65,8 @@ namespace Meeting_App.Data.Database.Tables
         public virtual DbSet<tbl_TaskAssignee> tbl_TaskAssignee { get; set; }
         public virtual DbSet<tbl_TaskCc> tbl_TaskCc { get; set; }
         public virtual DbSet<tbl_TaskDetails> tbl_TaskDetails { get; set; }
+        public virtual DbSet<tbl_TraingType> tbl_TraingType { get; set; }
+        public virtual DbSet<tbl_TrainingCategory> tbl_TrainingCategory { get; set; }
         public virtual DbSet<tbl_UserFP> tbl_UserFP { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -237,9 +249,35 @@ namespace Meeting_App.Data.Database.Tables
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<District>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("District");
+
+                entity.Property(e => e.CapitalTehsilCode).HasMaxLength(20);
+
+                entity.Property(e => e.Code).IsRequired();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<Divisions>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("Divisions");
+
+                entity.Property(e => e.Code).IsRequired();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
             modelBuilder.Entity<EventCalender>(entity =>
             {
                 entity.Property(e => e.Attachment).HasMaxLength(500);
+
+                entity.Property(e => e.Cadre).HasMaxLength(500);
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -250,6 +288,10 @@ namespace Meeting_App.Data.Database.Tables
                 entity.Property(e => e.StartDateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Title).HasMaxLength(500);
+
+                entity.Property(e => e.TraingCategore).HasMaxLength(500);
+
+                entity.Property(e => e.TrainingType).HasMaxLength(500);
 
                 entity.Property(e => e.UpdationDate).HasColumnType("datetime");
 
@@ -330,6 +372,90 @@ namespace Meeting_App.Data.Database.Tables
                     .HasConstraintName("FK_Folders_Folders");
             });
 
+            modelBuilder.Entity<HflistWithMode>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("HflistWithMode");
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.Created_Date).HasColumnType("datetime");
+
+                entity.Property(e => e.DistrictName).IsRequired();
+
+                entity.Property(e => e.DivisionName).IsRequired();
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.FaxNo).HasMaxLength(50);
+
+                entity.Property(e => e.FullName).IsRequired();
+
+                entity.Property(e => e.HFCategoryName).IsRequired();
+
+                entity.Property(e => e.HFMISCode).IsRequired();
+
+                entity.Property(e => e.HFTypeName).IsRequired();
+
+                entity.Property(e => e.Mauza).HasMaxLength(50);
+
+                entity.Property(e => e.ModeName).HasMaxLength(50);
+
+                entity.Property(e => e.NA).HasMaxLength(30);
+
+                entity.Property(e => e.Name).IsRequired();
+
+                entity.Property(e => e.PP).HasMaxLength(30);
+
+                entity.Property(e => e.PhoneNo).HasMaxLength(50);
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.Property(e => e.TehsilName).IsRequired();
+
+                entity.Property(e => e.UcName).HasMaxLength(50);
+
+                entity.Property(e => e.UcNo).HasMaxLength(10);
+
+                entity.Property(e => e.Users_Id).HasMaxLength(128);
+            });
+
+            modelBuilder.Entity<Hfmode>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("Hfmode");
+
+                entity.Property(e => e.ModeName).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Hftype>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("Hftype");
+
+                entity.Property(e => e.Code).IsRequired();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<HrDesignation>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("HrDesignation");
+
+                entity.Property(e => e.Created_By).HasMaxLength(100);
+
+                entity.Property(e => e.Creation_Date).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+
+                entity.Property(e => e.Remarks).HasMaxLength(150);
+            });
+
             modelBuilder.Entity<MeetingAttachment>(entity =>
             {
                 entity.Property(e => e.SourceName).HasMaxLength(50);
@@ -361,6 +487,195 @@ namespace Meeting_App.Data.Database.Tables
                     .HasForeignKey(d => d.UserIdTo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Notification_AspNetUsers1");
+            });
+
+            modelBuilder.Entity<ProfileView>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ProfileView");
+
+                entity.Property(e => e.AdditionalCharge).HasMaxLength(100);
+
+                entity.Property(e => e.AdditionalQualification).HasMaxLength(100);
+
+                entity.Property(e => e.AttachedWith).HasMaxLength(2050);
+
+                entity.Property(e => e.BloodGroup).HasMaxLength(10);
+
+                entity.Property(e => e.CNIC).HasMaxLength(15);
+
+                entity.Property(e => e.Cadre_Name).HasMaxLength(100);
+
+                entity.Property(e => e.Category).HasMaxLength(150);
+
+                entity.Property(e => e.ContractEndDate).HasColumnType("date");
+
+                entity.Property(e => e.ContractOrderNumber).HasMaxLength(550);
+
+                entity.Property(e => e.ContractStartDate).HasColumnType("date");
+
+                entity.Property(e => e.CorrespondenceAddress).HasMaxLength(350);
+
+                entity.Property(e => e.CourseDuration).HasMaxLength(50);
+
+                entity.Property(e => e.CourseName).HasMaxLength(250);
+
+                entity.Property(e => e.DateOfBirth).HasColumnType("date");
+
+                entity.Property(e => e.DateOfCourse).HasMaxLength(50);
+
+                entity.Property(e => e.DateOfFirstAppointment).HasColumnType("date");
+
+                entity.Property(e => e.DateOfRegularization).HasColumnType("date");
+
+                entity.Property(e => e.Department_Name).HasMaxLength(150);
+
+                entity.Property(e => e.Designation_Name).HasMaxLength(100);
+
+                entity.Property(e => e.Disability).HasMaxLength(2050);
+
+                entity.Property(e => e.DisablityType).HasMaxLength(2050);
+
+                entity.Property(e => e.Domicile_Name).HasMaxLength(50);
+
+                entity.Property(e => e.EMaiL).HasMaxLength(150);
+
+                entity.Property(e => e.EmpMode_Name).HasMaxLength(50);
+
+                entity.Property(e => e.EmployeeName).HasMaxLength(250);
+
+                entity.Property(e => e.FatherName).HasMaxLength(250);
+
+                entity.Property(e => e.Faxno).HasMaxLength(50);
+
+                entity.Property(e => e.FileNumber).HasMaxLength(2050);
+
+                entity.Property(e => e.FirstOrderNumber).HasMaxLength(550);
+
+                entity.Property(e => e.Fp)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Gender).HasMaxLength(15);
+
+                entity.Property(e => e.Hfac).HasMaxLength(50);
+
+                entity.Property(e => e.HfmisCode).HasMaxLength(50);
+
+                entity.Property(e => e.HighestQualification).HasMaxLength(100);
+
+                entity.Property(e => e.HoD)
+                    .HasMaxLength(2)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.JDesignation_Name).HasMaxLength(100);
+
+                entity.Property(e => e.LandlineNo).HasMaxLength(50);
+
+                entity.Property(e => e.Language_Name).HasMaxLength(50);
+
+                entity.Property(e => e.LastPromotionDate).HasColumnType("date");
+
+                entity.Property(e => e.MaritalStatus).HasMaxLength(50);
+
+                entity.Property(e => e.MobileNo).HasMaxLength(50);
+
+                entity.Property(e => e.MobileNoOfficial).HasMaxLength(50);
+
+                entity.Property(e => e.ModeName).HasMaxLength(150);
+
+                entity.Property(e => e.OtherContract).HasMaxLength(2050);
+
+                entity.Property(e => e.PermanentAddress).HasMaxLength(350);
+
+                entity.Property(e => e.PersonnelNo).HasMaxLength(50);
+
+                entity.Property(e => e.PgFlag).HasMaxLength(5);
+
+                entity.Property(e => e.PgSpecialization).HasMaxLength(250);
+
+                entity.Property(e => e.Photo).HasColumnType("image");
+
+                entity.Property(e => e.PmdcNo).HasMaxLength(250);
+
+                entity.Property(e => e.PostType_Name).HasMaxLength(50);
+
+                entity.Property(e => e.PresentPostingDate).HasColumnType("date");
+
+                entity.Property(e => e.PresentPostingOrderNo).HasMaxLength(100);
+
+                entity.Property(e => e.PresentStationLengthOfService).HasMaxLength(50);
+
+                entity.Property(e => e.PrivatePractice).HasMaxLength(50);
+
+                entity.Property(e => e.ProfilePhoto).HasMaxLength(250);
+
+                entity.Property(e => e.PromotionOrderNumber).HasMaxLength(550);
+
+                entity.Property(e => e.Province).HasMaxLength(20);
+
+                entity.Property(e => e.QualificationName).HasMaxLength(100);
+
+                entity.Property(e => e.RegularOrderNumber).HasMaxLength(550);
+
+                entity.Property(e => e.Religion_Name).HasMaxLength(50);
+
+                entity.Property(e => e.Remarks).HasMaxLength(500);
+
+                entity.Property(e => e.RemunerationStatus).HasMaxLength(150);
+
+                entity.Property(e => e.RtmcNo).HasMaxLength(250);
+
+                entity.Property(e => e.SeniorityNo).HasMaxLength(50);
+
+                entity.Property(e => e.SpecializationName).HasMaxLength(200);
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.Property(e => e.StatusName).HasMaxLength(50);
+
+                entity.Property(e => e.SuperAnnuationDate).HasColumnType("date");
+
+                entity.Property(e => e.Tbydeo).HasMaxLength(50);
+
+                entity.Property(e => e.Tenure).HasMaxLength(50);
+
+                entity.Property(e => e.VacCertificate).HasMaxLength(3050);
+
+                entity.Property(e => e.VerifiedBy).HasMaxLength(150);
+
+                entity.Property(e => e.VerifiedUserId).HasMaxLength(150);
+
+                entity.Property(e => e.WDesignation_Name).HasMaxLength(100);
+
+                entity.Property(e => e.WorkingHFMISCode).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ScheduleTraining>(entity =>
+            {
+                entity.Property(e => e.CreationDate)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdationDate)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+            });
+
+            modelBuilder.Entity<Tehsils>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("Tehsils");
+
+                entity.Property(e => e.Code).IsRequired();
+
+                entity.Property(e => e.Name).IsRequired();
             });
 
             modelBuilder.Entity<ViewFileFolderUnionDeleted>(entity =>
@@ -414,6 +729,19 @@ namespace Meeting_App.Data.Database.Tables
                 entity.Property(e => e.FolderDescripion).HasMaxLength(500);
 
                 entity.Property(e => e.FolderName).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<abc>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.DepartmentId)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.TraingCategory).HasMaxLength(500);
+
+                entity.Property(e => e.TrainingType).HasMaxLength(500);
             });
 
             modelBuilder.Entity<tbl_Conference>(entity =>
@@ -692,6 +1020,28 @@ namespace Meeting_App.Data.Database.Tables
                     .WithMany(p => p.tbl_TaskDetails)
                     .HasForeignKey(d => d.TaskId)
                     .HasConstraintName("FK_tbl_TaskDetails_tbl_Task");
+            });
+
+            modelBuilder.Entity<tbl_TraingType>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasMaxLength(500);
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy).HasMaxLength(500);
+
+                entity.Property(e => e.UpdationDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<tbl_TrainingCategory>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasMaxLength(500);
+
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedBy).HasMaxLength(500);
+
+                entity.Property(e => e.UpdationDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<tbl_UserFP>(entity =>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Meeting_App.Data.Database.Context;
 using Meeting_App.Data.Database.Tables;
 using Meeting_App.Models;
 using Meeting_App.Models.DTOs;
@@ -45,12 +46,12 @@ namespace Meeting_App.Controllers
         [HttpPost]
         [Route("AddEvent")]
         public async Task<IActionResult> AddEvent([FromForm] EventCalenderView model)
-        {
+         {
             try
-            { 
+            {
                 string userid = this.GetUserId();
                 //string userid = "333C3DEB-F4E0-460F-0A8A-08D9C9F8DBEA";
-                model.EventParticipant = JsonConvert.DeserializeObject<List<EventParticipantView>>(model.EventParticipantData);
+               // model.EventParticipant = JsonConvert.DeserializeObject<List<EventParticipantView>>(model.EventParticipantData);
 
                 var res = await _eventServices.AddEvent(model, userid);
 
@@ -113,6 +114,28 @@ namespace Meeting_App.Controllers
 
 
 
+        #region GetTrainings
+        [Authorize]
+        [HttpGet]
+        [Route("GetTrainings")]
+        public async Task<IActionResult> GetTrainings()
+        {
+            try
+            {
+                Guid userid = Guid.Parse(this.GetUserId());
+                var isAdmin = await _cService.CheckRoleExists(userid, "Admin");
+              
+                var list = _eventServices.GetTrainings();
+
+                return Ok(UtilService.GetResponse(list));
+            }
+            catch (Exception ex)
+            {
+                return Ok(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+        #endregion
+
         #region GetAllEvents
         [Authorize]
         [HttpPost]
@@ -131,7 +154,7 @@ namespace Meeting_App.Controllers
                 {
                     filter.UserId = userid;
                 }
-               var list = _eventServices.GetEvents(filter);
+                var list = _eventServices.GetEvents(filter);
 
                 return Ok(UtilService.GetResponse(list));
             }
@@ -141,11 +164,10 @@ namespace Meeting_App.Controllers
             }
         }
 
-
         #endregion
 
 
-        #region AddVenue
+        #region Venue
         [HttpPost]
         [Route("AddVenue")]
         public IActionResult AddVenue([FromForm] MeetingVenueDTO model)
@@ -179,7 +201,146 @@ namespace Meeting_App.Controllers
                 return BadRequest(UtilService.GetExResponse<Exception>(ex));
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetVenues")]
+        public async Task<IActionResult> GetVenues()
+        {
+            try
+            {
+                Guid userid = Guid.Parse(this.GetUserId());
+                var isAdmin = await _cService.CheckRoleExists(userid, "Admin");
+
+                var list = _eventServices.GetVenue();
+
+                return Ok(UtilService.GetResponse(list));
+            }
+            catch (Exception ex)
+            {
+                return Ok(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+
+
+
+            #endregion
+
+            #region TariningCategory
+            [HttpPost]
+        [Route("AddTariningCategory")]
+        public IActionResult AddTariningCategory( TrainingCategoryDTO model)
+        {
+            try
+            {
+                int res = 0;
+
+                ///
+                string userid = this.GetUserId();
+
+                res = _eventServices.AddTraingCategory(model, userid);
+
+                string msg = "";
+
+                if (res == 1)
+                {
+                    msg = "Saved Successfully";
+                    _hub.Clients.All.SendAsync("transferchartdata", _notificationService.GetNotifications("*", userid, true));
+                }
+                else
+                {
+                    msg = "Updated Successfully";
+                }
+                return Ok(UtilService.GetResponse<Json>(null, msg));
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetTariningCategory")]
+        public IActionResult GetTariningCategory()
+        {
+            try
+            {
+                return Ok(UtilService.GetResponse<List<tbl_TrainingCategory>>(_eventServices.GetTrainingCategory()));
+            }
+            catch (Exception ex)
+            {
+                return Ok(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
         #endregion
+
+        #region TariningType
+        [HttpPost]
+        [Route("AddTariningType")]
+        public IActionResult AddTariningType(TrainingTypeDTO model)
+        {
+            try
+            {
+                int res = 0;
+
+                ///
+                string userid = this.GetUserId();
+
+                res = _eventServices.AddTrainingType(model, userid);
+
+                string msg = "";
+
+                if (res == 1)
+                {
+                    msg = "Saved Successfully";
+                    _hub.Clients.All.SendAsync("transferchartdata", _notificationService.GetNotifications("*", userid, true));
+                }
+                else
+                {
+                    msg = "Updated Successfully";
+                }
+                return Ok(UtilService.GetResponse<Json>(null, msg));
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetTrainingType")]
+        public IActionResult GetTrainingType()
+        {
+            try
+            {
+                return Ok(UtilService.GetResponse<List<tbl_TraingType>>(_eventServices.GetTrainingType()));
+            }
+            catch (Exception ex)
+            {
+                return Ok(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region AddOrganizer
         [HttpPost]
@@ -232,6 +393,7 @@ namespace Meeting_App.Controllers
                 return Ok(UtilService.GetExResponse<Exception>(ex));
             }
         }
+
         #endregion
 
 
@@ -282,7 +444,7 @@ namespace Meeting_App.Controllers
                 Guid userid = Guid.Parse(this.GetUserId());
 
                 List<EventCalenderView> TaskList = _eventServices.GetMeetingListsByStatus(userid, status);
-             
+
 
                 if (await _cService.CheckRoleExists(userid, "Admin"))
                 {
@@ -358,12 +520,12 @@ namespace Meeting_App.Controllers
             {
                 int res = 0;
 
-                
+
                 string userid = this.GetUserId();
-              //string userid = "4474BD83-AF36-42F8-3BB1-08D9CAAF2517";
+                //string userid = "4474BD83-AF36-42F8-3BB1-08D9CAAF2517";
 
 
-                res =  _eventServices.UpdateMeetingStatus(model, userid);
+                res = _eventServices.UpdateMeetingStatus(model, userid);
 
                 string msg = "";
 

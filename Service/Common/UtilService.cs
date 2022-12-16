@@ -1,4 +1,4 @@
-﻿using Meeting_App.Data.Database.Tables;
+﻿using Meeting_App.Data.Database.Context;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

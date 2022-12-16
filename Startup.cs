@@ -36,6 +36,7 @@ namespace Meeting_App
         }
 
         public IConfiguration Configuration { get; }
+        private readonly string swaggerBasePath = "api/app";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -208,10 +209,10 @@ namespace Meeting_App
                 endpoints.MapHub<NotificationHub>("/notifications");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp/dist";
-            });
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp/dist";
+            //});
         }
 
 
