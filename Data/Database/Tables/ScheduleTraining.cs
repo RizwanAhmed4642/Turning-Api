@@ -11,8 +11,9 @@ namespace Meeting_App.Data.Database.Tables
         public DateTime? EndDate { get; set; }
         public bool? IsDone { get; set; }
         public Guid? CreatedBy { get; set; }
-        public string CreationDate { get; set; }
+        public DateTime? CreationDate { get; set; }
         public Guid? UpdatedBy { get; set; }
-        public string UpdationDate { get; set; }
+        public DateTime? UpdationDate { get; set; }
+        public int? VenueId { get; set; }
     }
 }

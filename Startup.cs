@@ -153,6 +153,7 @@ namespace Meeting_App
             services.AddTransient<TaskService>();
             services.AddTransient<FolderService>();
             services.AddTransient<EventServices>();
+            services.AddTransient<ScheduleServices>();
             services.AddTransient<ContactsService>();
             services.AddTransient<DailyEngagementService>();
             services.AddTransient<ConferenceServices>();

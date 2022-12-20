@@ -41,6 +41,7 @@ namespace Meeting_App.Data.Database.Context
         public virtual DbSet<MeetingAttachment> MeetingAttachment { get; set; }
         public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<ProfileView> ProfileView { get; set; }
+        public virtual DbSet<ScheduleList> ScheduleList { get; set; }
         public virtual DbSet<ScheduleTraining> ScheduleTraining { get; set; }
         public virtual DbSet<Tehsils> Tehsils { get; set; }
         public virtual DbSet<ViewFileFolderUnionDeleted> ViewFileFolderUnionDeleted { get; set; }
@@ -652,19 +653,28 @@ namespace Meeting_App.Data.Database.Context
                 entity.Property(e => e.WorkingHFMISCode).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ScheduleTraining>(entity =>
+            modelBuilder.Entity<ScheduleList>(entity =>
             {
-                entity.Property(e => e.CreationDate)
-                    .HasMaxLength(10)
-                    .IsFixedLength();
+                entity.HasNoKey();
+
+                entity.ToView("ScheduleList");
 
                 entity.Property(e => e.EndDate).HasColumnType("datetime");
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
-                entity.Property(e => e.UpdationDate)
-                    .HasMaxLength(10)
-                    .IsFixedLength();
+                entity.Property(e => e.Title).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<ScheduleTraining>(entity =>
+            {
+                entity.Property(e => e.CreationDate).HasColumnType("datetime");
+
+                entity.Property(e => e.EndDate).HasColumnType("datetime");
+
+                entity.Property(e => e.StartDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdationDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Tehsils>(entity =>

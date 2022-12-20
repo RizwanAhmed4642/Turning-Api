@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System;
 using Meeting_App.Data.Database.Context;
 using System.Linq;
+using Meeting_App.Models.DTOs;
 
 namespace Meeting_App.Controllers
 {
@@ -32,13 +33,70 @@ namespace Meeting_App.Controllers
         #region Constructor
 
         //private readonly IDDbContext db;
-        public ScheduleController(UserManager<Applicationuser> user, EventServices eventServices, IMapper mapper, IHubContext<NotificationHub> hub)
+        public ScheduleController(ScheduleServices _scheduleServices, UserManager<Applicationuser> user, EventServices eventServices, IMapper mapper, IHubContext<NotificationHub> hub)
         {
             _eventServices = eventServices;
+            this._scheduleServices = _scheduleServices;
             _hub = hub;
             _cService = new CommonService(user);
             //db = context;
         }
+        #endregion
+        #region Schedule
+        [HttpPost]
+        [Route("AddSchedule")]
+        public  IActionResult AddSchedule([FromForm] ScheduleDTO model)
+        {
+            try
+            {
+                long res = 0;
+
+                ///
+                string userid = this.GetUserId();
+
+                res = _scheduleServices.AddSchedule(model, userid);
+
+                string msg = "";
+
+                if (res > 0)
+                {
+                    msg = "Saved Successfully";
+                    _hub.Clients.All.SendAsync("transferchartdata", _notificationService.GetNotifications("*", userid, true));
+                }
+                else
+                {
+                    msg = "Updated Successfully";
+                }
+                return Ok(UtilService.GetResponse<Json>(null, msg));
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetSchedule")]
+        public async Task<IActionResult> GetSchedule()
+        {
+            try
+            {
+                Guid userid = Guid.Parse(this.GetUserId());
+                var isAdmin = await _cService.CheckRoleExists(userid, "Admin");
+
+                var list = _scheduleServices.GetSchedule();
+
+                return Ok(UtilService.GetResponse(list));
+            }
+            catch (Exception ex)
+            {
+                return Ok(UtilService.GetExResponse<Exception>(ex));
+            }
+        }
+
         #endregion
         #region Designation
         [Authorize]

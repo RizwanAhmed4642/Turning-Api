@@ -77,6 +77,19 @@ namespace Meeting_App.Models.DTOs
         public DateTime? CreationDate { get; set; }
         public string UpdatedBy { get; set; }
         public DateTime? UpdationDate { get; set; }
+    } 
+    public class ScheduleDTO
+    {
+        public long Id { get; set; }
+        public int TrainingId { get; set; }
+        public int VenueId { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+     
+        public string CreatedBy { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime? UpdationDate { get; set; }
     }
     public class TrainingCategoryDTO
     {

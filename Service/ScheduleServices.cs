@@ -37,8 +37,8 @@ namespace Meeting_App.Service
         }
         #endregion
 
-        #region AddEvent
-        public async Task<EventCalenderView> AddEvent(EventCalenderView model, string userid)
+        #region Schedule
+        public long AddSchedule(ScheduleDTO model, string userid)
         {
 
             using (var db = new IDDbContext())
@@ -47,26 +47,24 @@ namespace Meeting_App.Service
                 {
                     try
                     {
-                        var eventCalender = new EventCalender();
-                        eventCalender.Title = model.Title;
-                        eventCalender.Cadre = model.Cadre;
-                        eventCalender.TrainingType = model.TrainingType;
-                        eventCalender.TraingCategore = model.TrainingCategory;
-                        eventCalender.Departments = model.Departments;
-                        eventCalender.Description = model.Description;
-                        eventCalender.StartDateTime = model.StartDateTime;
-                        eventCalender.MeetingStatusId = model.MeetingStatusId;
-                        eventCalender.CreatedBy = Guid.Parse(userid);
-                        eventCalender.IsDeleted = false;
-                        eventCalender.CreationDate = UtilService.GetPkCurrentDateTime();
-                      await db.EventCalender.AddAsync(eventCalender);
+                        var _entity = new ScheduleTraining();
+                        _entity.TrainingId = model.TrainingId;
+                        _entity.VenueId = model.VenueId;
+                        _entity.StartDate = model.StartDateTime;
+                        _entity.EndDate = model.EndDateTime;
+
+
+                        _entity.CreatedBy = Guid.Parse(userid);
+                        _entity.IsDone = false;
+                        _entity.CreationDate = UtilService.GetPkCurrentDateTime();
+                        db.ScheduleTraining.AddAsync(_entity);
                         db.SaveChanges();
 
 
 
-                        model.Id = eventCalender.Id;
+                        model.Id = _entity.Id;
                         trans.Commit();
-                        return model;
+                        return model.Id;
 
                     }
                     catch (Exception ex)
@@ -80,6 +78,37 @@ namespace Meeting_App.Service
 
             }
         }
+
+        public List<ScheduleList> GetSchedule()
+        {
+
+            using (var db = new IDDbContext())
+            {
+
+                using (var trans = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var result = db.ScheduleList.ToList();
+
+
+
+                        return result;
+
+
+                    }
+                    catch (Exception)
+                    {
+                        trans.Rollback();
+                        throw;
+                    }
+                }
+
+
+            }
+        }
+
         #endregion
         #region UpdateAddEvent
         public async Task<EventCalenderView> Update(EventCalenderView model, string userid)
@@ -529,7 +558,7 @@ namespace Meeting_App.Service
                     {
 
                         var result = db.EventCalender.ToList();
-                   
+
 
 
                         return result;
@@ -545,7 +574,7 @@ namespace Meeting_App.Service
 
 
             }
-        }   
+        }
         public List<EventCalender> GetTrainings()
         {
 
@@ -557,7 +586,7 @@ namespace Meeting_App.Service
                     {
 
                         var result = db.EventCalender.ToList();
-                   
+
 
 
                         return result;
@@ -673,7 +702,7 @@ namespace Meeting_App.Service
             return SendSMSUfone(sms);
         }
 
- public void DeleteMeeting(int Id)
+        public void DeleteMeeting(int Id)
         {
 
             using (var db = new IDDbContext())
